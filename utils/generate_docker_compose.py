@@ -1,4 +1,10 @@
-services:
+import json
+
+with open("config.json") as config_file:
+    config = json.load(config_file)
+
+# Generate the docker compose with the given configuration
+docker_compose_content = f"""services:
 
   ipfs_node:
     container_name: ipfs_node
@@ -17,7 +23,7 @@ services:
       - ipfs_node
     environment:
       CLUSTER_PEERNAME: ipfs_cluster
-      CLUSTER_SECRET: "aa"
+      CLUSTER_SECRET: "{config['CLUSTER_SECRET']}"
       CLUSTER_IPFSHTTP_NODEMULTIADDRESS: /dns4/ipfs_node/tcp/5001
       CLUSTER_CRDT_TRUSTEDPEERS: '*' # Trust all peers in Cluster
       CLUSTER_RESTAPI_HTTPLISTENMULTIADDRESS: /ip4/0.0.0.0/tcp/9094 # expose API
@@ -28,8 +34,12 @@ services:
       - "9096:9096" # cluster swarm, other peers connect via this port
     volumes:
       - ./data/ipfs_cluster_data:/data/ipfs-cluster
-    command: ["daemon", "--bootstrap", "aaaaa"]
+    command: ["daemon", "--bootstrap", {', '.join(f'"{addr}"' for addr in config['PEERSTORE'])}]
 
 volumes:
   ipfs_data:
   ipfs_cluster_data:
+"""
+
+with open("docker-compose.yml", "w") as compose_file:
+    compose_file.write(docker_compose_content)

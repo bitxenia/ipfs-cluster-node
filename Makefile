@@ -3,6 +3,7 @@ COMPOSE_FILE = docker-compose.yml
 
 # Start the services with Docker Compose
 up:
+	python3 utils/generate_docker_compose.py
 	docker compose -f $(COMPOSE_FILE) up -d
 .PHONY: up
 
@@ -30,10 +31,15 @@ shell-cluster:
 	docker exec -it ipfs_cluster sh
 .PHONY: shell-cluster
 
-# Get IPFS Node ID (required for setting CLUSTER_PEER)
+# Get IPFS Node ID
 node-id:
 	docker exec ipfs_node ipfs id
 .PHONY: node-id
+
+# Get IPFS Cluster ID
+cluster-id:
+	docker exec ipfs_cluster ipfs-cluster-ctl id
+.PHONY: cluster-id
 
 # Remove all Docker images and volumes
 clean:
