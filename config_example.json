@@ -1,6 +1,4 @@
 {
     "CLUSTER_SECRET": "",
-    "PEERSTORE": [
-        
-    ]
+    "PEERSTORE": []
 }

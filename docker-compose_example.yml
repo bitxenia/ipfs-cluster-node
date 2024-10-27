@@ -28,7 +28,6 @@ services:
       - "9096:9096" # cluster swarm, other peers connect via this port
     volumes:
       - ./data/ipfs_cluster_data:/data/ipfs-cluster
-    command: [ "daemon", "--bootstrap", "" ]
 
 volumes:
   ipfs_data:
