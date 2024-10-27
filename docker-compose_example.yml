@@ -17,7 +17,7 @@ services:
       - ipfs_node
     environment:
       CLUSTER_PEERNAME: ipfs_cluster
-      CLUSTER_SECRET: "aa"
+      CLUSTER_SECRET: ""
       CLUSTER_IPFSHTTP_NODEMULTIADDRESS: /dns4/ipfs_node/tcp/5001
       CLUSTER_CRDT_TRUSTEDPEERS: '*' # Trust all peers in Cluster
       CLUSTER_RESTAPI_HTTPLISTENMULTIADDRESS: /ip4/0.0.0.0/tcp/9094 # expose API
@@ -28,7 +28,7 @@ services:
       - "9096:9096" # cluster swarm, other peers connect via this port
     volumes:
       - ./data/ipfs_cluster_data:/data/ipfs-cluster
-    command: ["daemon", "--bootstrap", "aaaaa"]
+    command: [ "daemon", "--bootstrap", "" ]
 
 volumes:
   ipfs_data:
