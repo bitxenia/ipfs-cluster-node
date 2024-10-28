@@ -9,13 +9,13 @@ This repository provides a way to run an IPFS cluster node using Docker.
 
 ## Setup
 
-First copy the `config_example.json` file to `config.json` and set the environment variables as needed.
+First copy the `.env.example` file to `.env` and set the environment variables as needed.
 
 - `CLUSTER_SECRET` is the secret key used to authenticate the cluster nodes.
-- `PEERSTORE` are the addresses of the all known trusted peers in the cluster.
+- `TRUSTED_PEERS` are the addresses of the all known trusted peers in the cluster.
 
 ```bash
-cp config_example.json config.json
+cp .env.example .env
 ```
 
 ## Usage
@@ -31,5 +31,3 @@ A `Makefile` is provided to simplify the process of building and running the IPF
 - `make node-id`: Get the ID of the IPFS cluster node.
 - `make cluster-id`: Get the ID of the IPFS cluster.
 - `make clean`: Remove the IPFS cluster node.
-
-

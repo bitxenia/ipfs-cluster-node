@@ -1,7 +1,11 @@
-import json
-
-with open("config.json") as config_file:
-    config = json.load(config_file)
+# Read the configuration from the .env file
+config = {}
+with open(".env", "r") as env_file:
+    for line in env_file:
+        key_and_value = line.strip().split("=")
+        key = key_and_value[0]
+        value = key_and_value[1] if len(key_and_value) > 1 else ""
+        config[key] = value
 
 # Generate the docker compose with the given configuration
 docker_compose_content = f"""services:
@@ -15,6 +19,8 @@ docker_compose_content = f"""services:
       - "8080:8080" # ipfs gateway
     volumes:
       - ./data/ipfs_data:/data/ipfs
+      - ./{config['PUBLISH_DIRECTORY_NAME']}:/{config['PUBLISH_DIRECTORY_NAME']}
+    command: ['daemon', '--init'{", '--enable-namesys-pubsub'" if config['ENABLE_IPNS_PUBSUB'] == 'true' else ""}]
 
   ipfs_cluster:
     container_name: ipfs_cluster
@@ -22,7 +28,7 @@ docker_compose_content = f"""services:
     depends_on:
       - ipfs_node
     environment:
-      CLUSTER_PEERNAME: ipfs_cluster
+      CLUSTER_PEERNAME: {config['CLUSTER_PEER_NAME']}
       CLUSTER_SECRET: "{config['CLUSTER_SECRET']}"
       CLUSTER_IPFSHTTP_NODEMULTIADDRESS: /dns4/ipfs_node/tcp/5001
       CLUSTER_CRDT_TRUSTEDPEERS: '*' # Trust all peers in Cluster
@@ -34,10 +40,11 @@ docker_compose_content = f"""services:
       - "9096:9096" # cluster swarm, other peers connect via this port
     volumes:
       - ./data/ipfs_cluster_data:/data/ipfs-cluster
-    {"command: ['daemon', '--bootstrap', " + ", ".join(f'"{addr}"' for addr in config["PEERSTORE"]) + "]" if config['PEERSTORE'] else ""}
+    {"command: ['daemon', '--bootstrap', " + ", ".join(f'"{addr}"' for addr in config["TRUSTED_PEERS"]) + "]" if config['TRUSTED_PEERS'] else ""}
 
 volumes:
   ipfs_data:
+  {config['PUBLISH_DIRECTORY_NAME']}:
   ipfs_cluster_data:
 """
 
