@@ -40,7 +40,7 @@ docker_compose_content = f"""services:
       - "9096:9096" # cluster swarm, other peers connect via this port
     volumes:
       - ./data/ipfs_cluster_data:/data/ipfs-cluster
-    {"command: ['daemon', '--bootstrap', " + ", ".join(f'"{addr}"' for addr in config["TRUSTED_PEERS"]) + "]" if config['TRUSTED_PEERS'] else ""}
+    {"command: ['daemon', '--bootstrap', " +  "'" + config["TRUSTED_PEERS"] + "'" + "]" if config['TRUSTED_PEERS'] else ""}
 
 volumes:
   ipfs_data:
