@@ -78,6 +78,7 @@ def update_ipns(cid):
         "ipfs",
         "name",
         "publish",
+        "--ttl=1m",
         f"/ipfs/{cid}",
     ]
 
