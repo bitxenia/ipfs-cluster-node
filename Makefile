@@ -12,10 +12,6 @@ down:
 	docker compose -f $(COMPOSE_FILE) down
 .PHONY: down
 
-# Restart the services
-restart: down up
-.PHONY: restart
-
 # View logs from the services
 logs:
 	docker compose -f $(COMPOSE_FILE) logs -f
@@ -40,8 +36,3 @@ node-id:
 cluster-id:
 	docker exec ipfs_cluster ipfs-cluster-ctl id
 .PHONY: cluster-id
-
-# Remove all Docker images and volumes
-clean:
-	docker compose -f $(COMPOSE_FILE) down --volumes --remove-orphans
-.PHONY: clean
