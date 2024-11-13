@@ -29,7 +29,7 @@ docker_compose_content = f"""services:
       - ipfs_node
     environment:
       CLUSTER_PEERNAME: {config['CLUSTER_PEER_NAME']}
-      {"CLUSTER_SECRET: " + {config['CLUSTER_SECRET']} if config['CLUSTER_SECRET'] else ""}
+      {"CLUSTER_SECRET: " + config['CLUSTER_SECRET'] if config['CLUSTER_SECRET'] else ""}
       CLUSTER_IPFSHTTP_NODEMULTIADDRESS: /dns4/ipfs_node/tcp/5001
       CLUSTER_CRDT_TRUSTEDPEERS: '*' # Trust all peers in Cluster
       CLUSTER_RESTAPI_HTTPLISTENMULTIADDRESS: /ip4/0.0.0.0/tcp/9094 # expose API
